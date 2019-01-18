@@ -4,3 +4,6 @@
 [submodule "pyreadstat"]
 	path = pyreadstat
 	url = https://github.com/Roche/pyreadstat
+[submodule "pyreadstat-fork"]
+	path = pyreadstat-fork
+	url = https://github.com/ofajardo/pyreadstat.git

@@ -1,3 +1,5 @@
+## This is a fork which purpose is to quickly test if the package builds correctly without deploying the wheels anywhere
+
 ########################################
 Building and uploading pyreadstat wheels
 ########################################

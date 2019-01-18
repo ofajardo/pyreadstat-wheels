@@ -1,7 +1,7 @@
 env:
   global:
-      - REPO_DIR="pyreadstat"
-      - BUILD_COMMIT=v0.2.1
+      - REPO_DIR="pyreadstat-fork"
+      - BUILD_COMMIT=5472ea93e6fae75a26f3bec0edf25308132a7465
       - PLAT=x86_64
       - UNICODE_WIDTH=32
       - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
@@ -80,10 +80,10 @@ install:
 script:
     - install_run $PLAT
 
-after_success:
+#after_success:
     # Upload wheels to Rackspace container
-    - pip install wheelhouse-uploader
-    - python -m wheelhouse_uploader upload --local-folder
-          ${TRAVIS_BUILD_DIR}/wheelhouse/
-          --no-update-index
-          wheels
+    #- pip install wheelhouse-uploader
+    #- python -m wheelhouse_uploader upload --local-folder
+    #      ${TRAVIS_BUILD_DIR}/wheelhouse/
+    #      --no-update-index
+    #      wheels
