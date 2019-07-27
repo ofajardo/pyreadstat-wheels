@@ -39,6 +39,7 @@ install:
   - activate python%PYTHON_VERSION%-%PLATFORM%
   - conda install -q setuptools pandas wheel pip libpython cython zlib
   - conda install -q -c msys2 m2w64-toolchain
+  - cd pyreadstat
   - git fetch origin
   - git checkout %BUILD_COMMIT%
   #- python.exe setup.py config_fc
