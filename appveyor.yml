@@ -1,0 +1,73 @@
+environment:
+
+global:
+      # Remember to edit .travis.yml too
+      BUILD_COMMIT: 1224b5ac06902ff5d4595784542b491fdcdae8ca
+      #WHEELHOUSE_UPLOADER_USERNAME: travis-worker
+      #WHEELHOUSE_UPLOADER_SECRET:
+      #  secure:
+      #      9s0gdDGnNnTt7hvyNpn0/ZzOMGPdwPp2SewFTfGzYk7uI+rdAN9rFq2D1gAP4NQh
+
+  matrix:
+    - PYTHON_VERSION: "3.5"
+      CONDAPATH: 'C:\Miniconda35'
+    #- PYTHON_VERSION: "3.6"
+    #  CONDAPATH: 'C:\Miniconda36'
+    #- PYTHON_VERSION: "3.7"
+    #  CONDAPATH: 'C:\Miniconda37'
+
+#cache:
+#  - '%LOCALAPPDATA%\pip\Cache'
+#  - '%USERPROFILE%\.cache\matplotlib'
+
+platform:
+  - x64
+  #- x86
+
+
+matrix:
+  fast_finish: false
+
+install:
+  - git submodule update --init
+  - if "%PLATFORM%" == "x86" set PATH=%CONDPATH%\bin;%CONDAPATH%\Scripts;%PATH%
+  - if "%PLATFORM%" == "x64" set PATH=%CONDPATH%-x64\bin;%CONDAPATH%-x64\Scripts;%PATH%
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda create -q --name python%PYTHON_VERSION%-%PLATFORM% python=%PYTHON_VERSION%
+  - conda create -q --name python%PYTHON_VERSION%-%PLATFORM%_testenv python=%PYTHON_VERSION%
+  - activate python%PYTHON_VERSION%-%PLATFORM%
+  - conda install -q setuptools pandas wheel pip libpython cython zlib
+  - conda install -q -c msys2 m2w64-toolchain
+  - del /Q dist\*.*
+  - dir dist
+  - git fetch origin
+  - git checkout %BUILD_COMMIT%
+  #- python.exe setup.py config_fc
+  - python.exe setup.py config --compiler=mingw32
+  #- copy C:\projects\pyreadstat\scripts\distutils.cfg %CONDAPATH%\Lib\distutils
+  - python.exe setup.py bdist_wheel 
+  - ps: "ls dist"
+  # prepare test environment
+  - deactivate
+  - activate python%PYTHON_VERSION%-%PLATFORM%_testenv
+  - conda install -q pandas wheel pip
+  - pip install --pre --no-index --find-links dist/ pyreadstat
+
+build: off
+
+test_script:
+    python.exe tests\test_basic.py
+
+after_test:
+  # This step builds your wheels.
+  #- python.exe setup.py bdist_wheel
+
+artifacts:
+  # bdist_wheel puts your built wheel in the dist directory
+  - path: dist\*.whl
+
+#on_success:
+#  You can use this step to upload your artifacts to a public website.
+#  See Appveyor's documentation for more details. Or you can simply
+#  access your wheels from the Appveyor "artifacts" tab for your build.
