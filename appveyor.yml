@@ -1,6 +1,6 @@
 environment:
 
-global:
+  global:
       # Remember to edit .travis.yml too
       BUILD_COMMIT: 1224b5ac06902ff5d4595784542b491fdcdae8ca
       #WHEELHOUSE_UPLOADER_USERNAME: travis-worker
